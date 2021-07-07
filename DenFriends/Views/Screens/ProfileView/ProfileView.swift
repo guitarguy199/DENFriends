@@ -45,6 +45,7 @@ struct ProfileView: View {
                         if viewModel.isCheckedIn {
                             Button {
                                 viewModel.checkOut()
+                                playHaptic()
                             } label: {
                                 Label("Check Out", systemImage: "mappin.and.ellipse")
                                     .font(.system(size: 12, weight: .semibold))
@@ -76,7 +77,7 @@ struct ProfileView: View {
                 .padding(.bottom)
             }
             
-            if viewModel.isLoading {  LoadingView() }
+            if viewModel.isLoading { LoadingView() }
         }
         
         .navigationTitle("Profile")
@@ -108,12 +109,6 @@ struct ProfileView_Previews: PreviewProvider {
         
     }
 }
-
-
-
-
-
-
 
 struct NameBackgroundView: View {
     var body: some View {
@@ -154,4 +149,3 @@ struct CharactersRemainingView: View {
             .foregroundColor(.secondary)
     }
 }
-

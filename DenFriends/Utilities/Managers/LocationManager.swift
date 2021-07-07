@@ -9,4 +9,5 @@ import Foundation
 
 final class LocationManager: ObservableObject {
     @Published var locations: [DFLocation] = []
+    var selectedLocation: DFLocation?
 }

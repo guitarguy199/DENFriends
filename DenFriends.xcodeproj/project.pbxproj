@@ -43,6 +43,9 @@
 		1BC9C82A268F945D0063A715 /* LocationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C829268F945D0063A715 /* LocationListView.swift */; };
 		1BC9C82C268F94830063A715 /* LocationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C82B268F94830063A715 /* LocationListViewModel.swift */; };
 		1BC9C82E268F949B0063A715 /* LocationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C82D268F949B0063A715 /* LocationCell.swift */; };
+		1BC9C831268FA36E0063A715 /* MapBalloon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C830268FA36E0063A715 /* MapBalloon.swift */; };
+		1BC9C833268FA6B70063A715 /* DFAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C832268FA6B70063A715 /* DFAnnotation.swift */; };
+		1BC9C83626936B1B0063A715 /* AppTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C83526936B1B0063A715 /* AppTabViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -85,6 +88,9 @@
 		1BC9C829268F945D0063A715 /* LocationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListView.swift; sourceTree = "<group>"; };
 		1BC9C82B268F94830063A715 /* LocationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationListViewModel.swift; sourceTree = "<group>"; };
 		1BC9C82D268F949B0063A715 /* LocationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCell.swift; sourceTree = "<group>"; };
+		1BC9C830268FA36E0063A715 /* MapBalloon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBalloon.swift; sourceTree = "<group>"; };
+		1BC9C832268FA6B70063A715 /* DFAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFAnnotation.swift; sourceTree = "<group>"; };
+		1BC9C83526936B1B0063A715 /* AppTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,7 +191,7 @@
 				1BC9C7F2268F87BC0063A715 /* ProfileView */,
 				1BC9C7F1268F87B50063A715 /* LocationDetailView */,
 				1BC9C7F0268F87AC0063A715 /* LocationListView */,
-				1BC9C7E9268F87510063A715 /* AppTabView.swift */,
+				1BC9C83426936B080063A715 /* AppTabView */,
 				1BC9C7EB268F87740063A715 /* OnboardView.swift */,
 			);
 			path = Screens;
@@ -274,10 +280,29 @@
 				1BC9C7E7268F86FF0063A715 /* CustomModifiers.swift */,
 				1BC9C815268F90010063A715 /* AvatarView.swift */,
 				1BC9C819268F908C0063A715 /* LoadingView.swift */,
+				1BC9C82F268FA3490063A715 /* Map Annotation */,
 				1BC9C7EF268F87A00063A715 /* UIKit Components */,
 				1BC9C7EE268F87980063A715 /* Buttons */,
 			);
 			path = CustomViews;
+			sourceTree = "<group>";
+		};
+		1BC9C82F268FA3490063A715 /* Map Annotation */ = {
+			isa = PBXGroup;
+			children = (
+				1BC9C830268FA36E0063A715 /* MapBalloon.swift */,
+				1BC9C832268FA6B70063A715 /* DFAnnotation.swift */,
+			);
+			path = "Map Annotation";
+			sourceTree = "<group>";
+		};
+		1BC9C83426936B080063A715 /* AppTabView */ = {
+			isa = PBXGroup;
+			children = (
+				1BC9C7E9268F87510063A715 /* AppTabView.swift */,
+				1BC9C83526936B1B0063A715 /* AppTabViewModel.swift */,
+			);
+			path = AppTabView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -349,6 +374,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1BC9C83626936B1B0063A715 /* AppTabViewModel.swift in Sources */,
 				1BC9C7F7268F87F00063A715 /* AlertItem.swift in Sources */,
 				1BC9C7FB268F88280063A715 /* UIImage+Ext.swift in Sources */,
 				1BC9C810268F8FAC0063A715 /* PhotoPicker.swift in Sources */,
@@ -366,6 +392,7 @@
 				1BC9C82A268F945D0063A715 /* LocationListView.swift in Sources */,
 				1BC9C803268F88AA0063A715 /* Color+Ext.swift in Sources */,
 				1BC9C7D4268F867E0063A715 /* ContentView.swift in Sources */,
+				1BC9C833268FA6B70063A715 /* DFAnnotation.swift in Sources */,
 				1BC9C7EA268F87510063A715 /* AppTabView.swift in Sources */,
 				1BC9C820268F92F30063A715 /* ProfileView.swift in Sources */,
 				1BC9C81E268F92A80063A715 /* LocationMapViewModel.swift in Sources */,
@@ -373,6 +400,7 @@
 				1BC9C801268F88940063A715 /* View+Ext.swift in Sources */,
 				1BC9C809268F89360063A715 /* DFLocation.swift in Sources */,
 				1BC9C7D2268F867E0063A715 /* DenFriendsApp.swift in Sources */,
+				1BC9C831268FA36E0063A715 /* MapBalloon.swift in Sources */,
 				1BC9C82C268F94830063A715 /* LocationListViewModel.swift in Sources */,
 				1BC9C816268F90010063A715 /* AvatarView.swift in Sources */,
 				1BC9C7F5268F87E50063A715 /* Constants.swift in Sources */,
