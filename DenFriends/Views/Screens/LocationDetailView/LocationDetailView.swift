@@ -10,7 +10,7 @@ import SwiftUI
 struct LocationDetailView: View {
     //use State when initializing new viewModel; ObservedObject when passing from another screen/location
     @ObservedObject var viewModel: LocationDetailViewModel
-    @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     
     
@@ -23,6 +23,8 @@ struct LocationDetailView: View {
                 ActionButtonHStack(viewModel: viewModel)
                 GridHeaderTextView(number: viewModel.checkedInProfiles.count)
                 AvatarGridView(viewModel: viewModel)
+                
+                Spacer()
             }
             .accessibilityHidden(viewModel.isShowingProfileModal)
             
@@ -39,15 +41,14 @@ struct LocationDetailView: View {
             viewModel.getCheckedInProfiles()
             viewModel.getCheckedInStatus()
         }
-        .sheet(isPresented: $viewModel.isShowingProfileSheet, content: {
+        .sheet(isPresented: $viewModel.isShowingProfileSheet) {
             NavigationView {
                 ProfileSheetView(profile: viewModel.selectedProfile!)
                     .toolbar {
                         Button("Dismiss", action: { viewModel.isShowingProfileSheet = false })
                     }
             }
-            .accentColor(.brandPrimary)
-        })
+        }
         .alert(item: $viewModel.alertItem, content: { $0.alert })
         .navigationTitle(viewModel.location.name)
         .navigationBarTitleDisplayMode(.inline)
@@ -60,7 +61,7 @@ struct LocationDetailView_Previews: PreviewProvider {
         NavigationView {
             LocationDetailView(viewModel: LocationDetailViewModel(location: DFLocation(record: MockData.location)))
         }
-        .environment(\.sizeCategory, .extraExtraExtraLarge)
+        .environment(\.dynamicTypeSize, .large)
     }
 }
 
@@ -89,13 +90,13 @@ fileprivate struct LocationActionButton: View {
 
 fileprivate struct FirstNameAvatarView: View {
     
-    @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     
     var profile: DFProfile
     
     var body: some View {
         VStack {
-            AvatarView(image: profile.avatarImage, size: sizeCategory >= .accessibilityMedium ? 100 : 64)
+            AvatarView(image: profile.avatarImage, size: dynamicTypeSize >= .accessibility3 ? 100 : 64)
             
             Text(profile.firstName)
                 .bold()
@@ -238,7 +239,7 @@ fileprivate struct ActionButtonHStack: View {
 
 fileprivate struct AvatarGridView: View {
     
-    @Environment(\.sizeCategory) var sizeCategory
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @ObservedObject var viewModel: LocationDetailViewModel
     
     var body: some View {
@@ -249,11 +250,15 @@ fileprivate struct AvatarGridView: View {
                 
             } else {
                 ScrollView {
-                    LazyVGrid(columns: viewModel.determineColumns(for: sizeCategory), content: {
+                    LazyVGrid(columns: viewModel.determineColumns(for: dynamicTypeSize), content: {
                         ForEach(viewModel.checkedInProfiles)  { profile in
                             FirstNameAvatarView(profile: profile)
                             
-                                .onTapGesture { viewModel.show(profile, in: sizeCategory) }
+                                .onTapGesture {
+                                    withAnimation {
+                                        viewModel.show(profile, in: dynamicTypeSize)
+                                    }
+                                }
                         }
                     })
                 }

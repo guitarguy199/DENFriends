@@ -20,7 +20,6 @@
 		1BC9C7F7268F87F00063A715 /* AlertItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C7F6268F87F00063A715 /* AlertItem.swift */; };
 		1BC9C7FB268F88280063A715 /* UIImage+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C7FA268F88280063A715 /* UIImage+Ext.swift */; };
 		1BC9C7FD268F88430063A715 /* CKAsset+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C7FC268F88430063A715 /* CKAsset+Ext.swift */; };
-		1BC9C7FF268F886A0063A715 /* CKRecord+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C7FE268F886A0063A715 /* CKRecord+Ext.swift */; };
 		1BC9C801268F88940063A715 /* View+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C800268F88940063A715 /* View+Ext.swift */; };
 		1BC9C803268F88AA0063A715 /* Color+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C802268F88AA0063A715 /* Color+Ext.swift */; };
 		1BC9C805268F88C40063A715 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C804268F88C40063A715 /* LocationManager.swift */; };
@@ -67,7 +66,6 @@
 		1BC9C7F6268F87F00063A715 /* AlertItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertItem.swift; sourceTree = "<group>"; };
 		1BC9C7FA268F88280063A715 /* UIImage+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Ext.swift"; sourceTree = "<group>"; };
 		1BC9C7FC268F88430063A715 /* CKAsset+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKAsset+Ext.swift"; sourceTree = "<group>"; };
-		1BC9C7FE268F886A0063A715 /* CKRecord+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CKRecord+Ext.swift"; sourceTree = "<group>"; };
 		1BC9C800268F88940063A715 /* View+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Ext.swift"; sourceTree = "<group>"; };
 		1BC9C802268F88AA0063A715 /* Color+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Ext.swift"; sourceTree = "<group>"; };
 		1BC9C804268F88C40063A715 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -262,7 +260,6 @@
 			children = (
 				1BC9C7FA268F88280063A715 /* UIImage+Ext.swift */,
 				1BC9C7FC268F88430063A715 /* CKAsset+Ext.swift */,
-				1BC9C7FE268F886A0063A715 /* CKRecord+Ext.swift */,
 				1BC9C800268F88940063A715 /* View+Ext.swift */,
 				1BC9C802268F88AA0063A715 /* Color+Ext.swift */,
 			);
@@ -394,7 +391,6 @@
 				1BC9C814268F8FDF0063A715 /* DFButton.swift in Sources */,
 				1BC9C80B268F896A0063A715 /* DFProfile.swift in Sources */,
 				1BC9C824268F934F0063A715 /* LocationDetailView.swift in Sources */,
-				1BC9C7FF268F886A0063A715 /* CKRecord+Ext.swift in Sources */,
 				1BC9C81C268F92900063A715 /* LocationMapView.swift in Sources */,
 				1BC9C82A268F945D0063A715 /* LocationListView.swift in Sources */,
 				1BC9C803268F88AA0063A715 /* Color+Ext.swift in Sources */,
@@ -475,7 +471,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -530,7 +526,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -551,7 +547,7 @@
 				DEVELOPMENT_TEAM = CPX7UMGPRQ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = DenFriends/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -559,7 +555,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tangentsystems.DenFriends;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -574,7 +570,7 @@
 				DEVELOPMENT_TEAM = CPX7UMGPRQ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = DenFriends/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -582,7 +578,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.tangentsystems.DenFriends;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

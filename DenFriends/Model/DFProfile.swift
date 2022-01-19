@@ -25,7 +25,6 @@ struct DFProfile: Identifiable {
     let avatar: CKAsset!
     let companyName: String
     let bio: String
-    let isCheckedIn: CKRecord.Reference?
     
     init(record: CKRecord) {
         id              = record.recordID
@@ -34,7 +33,6 @@ struct DFProfile: Identifiable {
         avatar          = record[DFProfile.kAvatar] as? CKAsset
         companyName     = record[DFProfile.kCompanyName] as? String ?? "N/A"
         bio             = record[DFProfile.kBio] as? String ?? "N/A"
-        isCheckedIn     = record[DFProfile.kIsCheckedIn] as? CKRecord.Reference
     }
     
     var avatarImage: UIImage {

@@ -39,6 +39,7 @@ final class CloudKitManager {
         }
     }
     
+    
     func getLocations(completed: @escaping (Result<[DFLocation], Error>) -> Void) {
         
         let sortDescriptor = NSSortDescriptor(key: DFLocation.kName, ascending: true)
@@ -48,14 +49,12 @@ final class CloudKitManager {
         query.sortDescriptors = [sortDescriptor]
         
         CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
-            guard error == nil else {
+            guard let records = records, error == nil else {
                 completed(.failure(error!))
                 return
             }
             
-            guard let records = records else { return }
-            
-            let locations = records.map { $0.convertToDFLocation() }
+            let locations = records.map(DFLocation.init)
             completed(.success(locations))
         }
     }
@@ -63,14 +62,14 @@ final class CloudKitManager {
     func getCheckedInProfiles(for locationID: CKRecord.ID, completed: @escaping (Result<[DFProfile], Error>) -> Void) {
         let reference = CKRecord.Reference(recordID: locationID, action: .none)
         let predicate = NSPredicate(format: "isCheckedIn == %@", reference)
-        let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
+        let query     = CKQuery(recordType: RecordType.profile, predicate: predicate)
         
         CKContainer.default().publicCloudDatabase.perform(query, inZoneWith: nil) { records, error in
             guard let records = records, error == nil else {
                 completed(.failure(error!))
                 return
             }
-            let profiles = records.map { $0.convertToDFProfile() }
+            let profiles = records.map(DFProfile.init)
             completed(.success(profiles))
         }
     }
@@ -79,8 +78,8 @@ final class CloudKitManager {
         let predicate = NSPredicate(format: "isCheckedInNilCheck == 1")
         let query = CKQuery(recordType: RecordType.profile, predicate: predicate)
         let operation = CKQueryOperation(query: query)
-//        run this line if you want to optimize network call. Only calls keys we need, but doesn't future-proof
-//        operation.desiredKeys = [DDGProfile.kIsCheckedIn, DDGProfile.kAvatar]
+        //        run this line if you want to optimize network call. Only calls keys we need, but doesn't future-proof
+        //        operation.desiredKeys = [DDGProfile.kIsCheckedIn, DDGProfile.kAvatar]
         
         var checkedInProfiles: [CKRecord.ID: [DFProfile]] = [:]
         
@@ -88,7 +87,7 @@ final class CloudKitManager {
             //Build dictionary
             let profile = DFProfile(record: record)
             
-            guard let locationReference = profile.isCheckedIn else { return }
+            guard let locationReference = record[DFProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
             
             checkedInProfiles[locationReference.recordID, default: []].append(profile)
         }
@@ -98,9 +97,62 @@ final class CloudKitManager {
                 return
             }
             
-            completed(.success(checkedInProfiles))
+            if let cursor = cursor {
+                self.continueWithCheckedInProfilesDict(cursor: cursor, dictionary: checkedInProfiles) { result in
+                    switch result {
+                        
+                    case .success(let profiles):
+                        completed(.success(profiles))
+                    case .failure(let error):
+                        completed(.failure(error))
+                    }
+                }
+            } else {
+                    completed(.success(checkedInProfiles))
+                }
         }
         CKContainer.default().publicCloudDatabase.add(operation)
+    }
+    
+    
+    func continueWithCheckedInProfilesDict(cursor: CKQueryOperation.Cursor,
+                                           dictionary: [CKRecord.ID: [DFProfile]],
+                                           completed: @escaping (Result<[CKRecord.ID: [DFProfile]], Error>) -> Void) {
+        
+        var checkedInProfiles = dictionary
+        let operation = CKQueryOperation(cursor: cursor)
+        
+        operation.recordFetchedBlock = { record in
+            let profile = DFProfile(record: record)
+            guard let locationReference = record[DFProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
+            checkedInProfiles[locationReference.recordID, default: []].append(profile)
+        }
+        
+        operation.queryCompletionBlock = { cursor, error in
+            
+            
+            guard error == nil else {
+                completed(.failure(error!))
+                return
+            }
+            
+            if let cursor = cursor {
+                self.continueWithCheckedInProfilesDict(cursor: cursor, dictionary: checkedInProfiles) { result in
+                    switch result {
+                        
+                    case .success(let profiles):
+                        completed(.success(profiles))
+                    case .failure(let error):
+                        completed(.failure(error))
+                    }
+                }
+            } else {
+                    completed(.success(checkedInProfiles))
+                }
+            }
+            
+        CKContainer.default().publicCloudDatabase.add(operation)
+        
     }
     
     
@@ -108,13 +160,13 @@ final class CloudKitManager {
         let predicate = NSPredicate(format: "isCheckedInNilCheck == 1")
         let query     = CKQuery(recordType: RecordType.profile, predicate: predicate)
         let operation = CKQueryOperation(query: query)
-//        run this line if you want to optimize network call. Only calls keys we need, but doesn't future-proof
+        //        run this line if you want to optimize network call. Only calls keys we need, but doesn't future-proof
         operation.desiredKeys = [DFProfile.kIsCheckedIn]
         
         var checkedInProfiles: [CKRecord.ID: Int] = [:]
         
         operation.recordFetchedBlock = { record in
-        
+            
             guard let locationReference = record[DFProfile.kIsCheckedIn] as? CKRecord.Reference else { return }
             
             if let count = checkedInProfiles[locationReference.recordID] {
