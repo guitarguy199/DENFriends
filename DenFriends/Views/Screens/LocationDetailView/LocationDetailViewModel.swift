@@ -15,18 +15,30 @@ final class LocationDetailViewModel: ObservableObject {
     
     @Published var checkedInProfiles: [DFProfile] = []
     @Published var isShowingProfileModal = false
+    @Published var isShowingProfileSheet = false
     @Published var isCheckedIn = false
     @Published var isLoading = false
     @Published var alertItem: AlertItem?
     
-    let columns = [GridItem(.flexible()),
-                   GridItem(.flexible()),
-                   GridItem(.flexible())]
-    
     var location: DFLocation
+    var selectedProfile: DFProfile?
+    var buttonColor: Color {
+        isCheckedIn ? .grubRed : .brandPrimary
+    }
+    var buttonImageTitle: String {
+        isCheckedIn ? "person.fill.xmark" : "person.fill.checkmark"
+    }
+    var buttonA11yLabel: String {
+        isCheckedIn ? "check out of location" : "check in to location"
+    }
     
     init(location: DFLocation) {
         self.location = location
+    }
+    
+    func determineColumns(for sizeCategory: ContentSizeCategory) -> [GridItem] {
+        let numberOfColumns = sizeCategory >= .accessibilityMedium ? 1 : 3
+        return Array(repeating: GridItem(.flexible()), count: numberOfColumns)
     }
     
     func getDirectionsToLocation() {
@@ -82,6 +94,7 @@ final class LocationDetailViewModel: ObservableObject {
             return
         }
         
+        showLoadingView()
         CloudKitManager.shared.fetchRecord(with: profileRecordID) { [self] result in
             switch result {
             
@@ -95,11 +108,14 @@ final class LocationDetailViewModel: ObservableObject {
                     record[DFProfile.kIsCheckedIn] = nil
                     record[DFProfile.kIsCheckedInNilCheck] = nil
                 }
+                
             // Save the updated profile to CloudKit
                 CloudKitManager.shared.save(record: record) { result in
                     DispatchQueue.main.async {
+                        hideLoadingView()
                         switch result {
                         case .success(_):
+                            HapticManager.playSuccess()
                             let profile = DFProfile(record: record)
                             
                             switch checkInStatus {
@@ -110,7 +126,7 @@ final class LocationDetailViewModel: ObservableObject {
                                 checkedInProfiles.removeAll(where:{$0.id == profile.id})
                             }
                             
-                            isCheckedIn =  checkInStatus == .checkedIn
+                            isCheckedIn.toggle()
                             
                             print("Checked in/out successfully")
                         case .failure(_):
@@ -120,6 +136,7 @@ final class LocationDetailViewModel: ObservableObject {
                 }
                 
             case .failure(_):
+                hideLoadingView()
                 alertItem = AlertContext.unableToCheckInOrOut
             }
         }
@@ -137,6 +154,16 @@ final class LocationDetailViewModel: ObservableObject {
                 }
                 hideLoadingView()
             }
+        }
+    }
+    
+    
+    func show(_ profile: DFProfile, in sizeCategory: ContentSizeCategory) {
+        selectedProfile = profile
+        if sizeCategory >= .accessibilityMedium {
+            isShowingProfileSheet = true
+        } else {
+            isShowingProfileModal = true
         }
     }
     

@@ -10,126 +10,62 @@ import SwiftUI
 struct LocationDetailView: View {
     //use State when initializing new viewModel; ObservedObject when passing from another screen/location
     @ObservedObject var viewModel: LocationDetailViewModel
-
-  
+    @Environment(\.sizeCategory) var sizeCategory
+    
+    
     
     var body: some View {
-  
         ZStack {
-            
             VStack(spacing: 16) {
-                BannerImageView(image: viewModel.location.createBannerImage())
-                
-                HStack {
-                    AddressView(address: viewModel.location.address)
-                    
-                    Spacer()
-                }
-                .padding(.horizontal)
+                BannerImageView(image: viewModel.location.bannerImage)
+                AddressHStack(address: viewModel.location.address)
                 DescriptionView(text: viewModel.location.description)
-                
-                ZStack {
-                    Capsule()
-                        .frame(height: 80)
-                        .foregroundColor(Color(.secondarySystemBackground))
-                    HStack(spacing: 20) {
-                        Button {
-                            viewModel.getDirectionsToLocation()
-                        } label: {
-                            LocationActionButton(color: .brandPrimary, imageName: "location.fill")
-                        }
-                        
-                        Link(destination: URL(string: viewModel.location.websiteURL)!, label: {
-                            LocationActionButton(color: .brandPrimary, imageName: "network")
-                        })
-                        
-                        Button {
-                            viewModel.callLocation()
-                        } label: {
-                            LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
-                        }
-                        if let _ = CloudKitManager.shared.profileRecordID {
-                            Button {
-                                viewModel.updateCheckInStatus(to: viewModel.isCheckedIn ? .checkedOut : .checkedIn)
-                                playHaptic()
-                            } label: {
-                                LocationActionButton(color: viewModel.isCheckedIn ? .grubRed : .brandPrimary, imageName: viewModel.isCheckedIn ? "person.fill.xmark" : "person.fill.checkmark")
-                            }
-                        }
-                        
-                        
-                        
-                    }
-                }
-                .padding(.horizontal)
-                
-                Text("Who's Here?")
-                    .bold()
-                    .font(.title2)
-                
-                ZStack {
-                    if viewModel.checkedInProfiles.isEmpty {
-                        //empty state
-                        Text("Nobody's Here 👻")
-                            .bold()
-                            .font(.title2)
-                            .foregroundColor(.secondary)
-                            .padding(.top, 30)
-                    } else {
-                        ScrollView {
-                            LazyVGrid(columns: viewModel.columns, content: {
-                                ForEach(viewModel.checkedInProfiles)  { profile in
-                                    FirstNameAvatarView(profile: profile)
-                                        .onTapGesture {
-                                            viewModel.isShowingProfileModal = true
-                                        }
-                                }
-                            })
-                        }
-                    }
-                    if viewModel.isLoading { LoadingView() }
-                }
-                Spacer()
+                ActionButtonHStack(viewModel: viewModel)
+                GridHeaderTextView(number: viewModel.checkedInProfiles.count)
+                AvatarGridView(viewModel: viewModel)
             }
+            .accessibilityHidden(viewModel.isShowingProfileModal)
+            
+            
             if viewModel.isShowingProfileModal {
-                Color(.systemBackground)
-                    .ignoresSafeArea()
-                    .opacity(0.9)
-//                    .transition(.opacity)
-                    .transition((AnyTransition.opacity.animation(.easeOut(duration: 0.35))))
-//                    .animation(.easeOut)
-                    .zIndex(1)
                 
+                FullScreenBlackTransparencyView()
                 
-                ProfileModalView(isShowingProfileModal: $viewModel.isShowingProfileModal, profile: DFProfile(record: MockData.profile))
-                    .transition(.opacity.combined(with: .slide))
-                    .animation(.easeOut)
-                    .zIndex(2)
+                ProfileModalView(isShowingProfileModal: $viewModel.isShowingProfileModal, profile: viewModel.selectedProfile!)
             }
         }
+        
         .onAppear {
             viewModel.getCheckedInProfiles()
             viewModel.getCheckedInStatus()
         }
-        .alert(item: $viewModel.alertItem, content: { alertItem in
-            Alert(title: alertItem.title, message: alertItem.message, dismissButton: alertItem.dismissButton)
+        .sheet(isPresented: $viewModel.isShowingProfileSheet, content: {
+            NavigationView {
+                ProfileSheetView(profile: viewModel.selectedProfile!)
+                    .toolbar {
+                        Button("Dismiss", action: { viewModel.isShowingProfileSheet = false })
+                    }
+            }
+            .accentColor(.brandPrimary)
         })
+        .alert(item: $viewModel.alertItem, content: { $0.alert })
         .navigationTitle(viewModel.location.name)
         .navigationBarTitleDisplayMode(.inline)
-        
     }
 }
 
 struct LocationDetailView_Previews: PreviewProvider {
     static var previews: some View {
+        
         NavigationView {
             LocationDetailView(viewModel: LocationDetailViewModel(location: DFLocation(record: MockData.location)))
         }
-      
+        .environment(\.sizeCategory, .extraExtraExtraLarge)
     }
 }
 
-struct LocationActionButton: View {
+
+fileprivate struct LocationActionButton: View {
     
     var color: Color
     var imageName: String
@@ -150,50 +86,179 @@ struct LocationActionButton: View {
     }
 }
 
-struct FirstNameAvatarView: View {
+
+fileprivate struct FirstNameAvatarView: View {
+    
+    @Environment(\.sizeCategory) var sizeCategory
     
     var profile: DFProfile
     
     var body: some View {
         VStack {
-            AvatarView(image: profile.createAvatarImage(), size: 64)
+            AvatarView(image: profile.avatarImage, size: sizeCategory >= .accessibilityMedium ? 100 : 64)
             
             Text(profile.firstName)
                 .bold()
                 .lineLimit(1)
                 .minimumScaleFactor(0.75)
         }
+        .accessibilityElement(children: .ignore)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityHint(Text("shows \(profile.firstName)'s profile pop up"))
+        .accessibilityLabel(Text("\(profile.firstName) \(profile.lastName)"))
     }
 }
 
-struct BannerImageView: View {
+
+fileprivate struct BannerImageView: View {
     var image: UIImage
     var body: some View {
         Image(uiImage: image)
             .resizable()
             .scaledToFill()
             .frame(height: 120)
+            .accessibilityHidden(true)
     }
 }
 
-struct AddressView: View {
+
+fileprivate struct AddressHStack: View {
     var address: String
     
     var body: some View {
-        Label(address, systemImage: "mappin.and.ellipse")
-            .font(.caption)
-            .foregroundColor(.secondary)
+        HStack {
+            Label(address, systemImage: "mappin.and.ellipse")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            Spacer()
+        }
+        .padding(.horizontal)
     }
 }
 
-struct DescriptionView: View {
+
+fileprivate struct DescriptionView: View {
     var text: String
     var body: some View {
         Text(text)
-            .lineLimit(3)
             .minimumScaleFactor(0.75)
-            .frame(height: 70)
+            .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)
     }
 }
 
+
+fileprivate struct GridHeaderTextView: View {
+    
+    var number: Int
+    
+    var body: some View {
+        Text("Who's Here?")
+            .bold()
+            .font(.title2)
+            .accessibilityAddTraits(.isHeader)
+            .accessibilityLabel(Text("Who's here? \(number) checked in"))
+            .accessibilityHint(Text("Bottom section is scrollable"))
+    }
+}
+
+
+fileprivate struct GridEmptyStateTextView: View {
+    
+    var body: some View {
+        Text("Nobody's Here 👻")
+            .bold()
+            .font(.title2)
+            .foregroundColor(.secondary)
+            .padding(.top, 30)
+    }
+}
+
+
+fileprivate struct FullScreenBlackTransparencyView: View {
+    
+    var body: some View {
+        Color(.systemBackground)
+            .ignoresSafeArea()
+            .opacity(0.9)
+        //                    .transition(.opacity)
+            .transition((AnyTransition.opacity.animation(.easeOut(duration: 0.35))))
+        //                    .animation(.easeOut)
+            .zIndex(1)
+            .accessibilityHidden(true)
+    }
+}
+
+
+fileprivate struct ActionButtonHStack: View {
+    
+    @ObservedObject var viewModel: LocationDetailViewModel
+    
+    var body: some View {
+        
+        HStack(spacing: 20) {
+            Button {
+                viewModel.getDirectionsToLocation()
+            } label: {
+                LocationActionButton(color: .brandPrimary, imageName: "location.fill")
+            }
+            .accessibilityLabel(Text("get directions"))
+            
+            Link(destination: URL(string: viewModel.location.websiteURL)!, label: {
+                LocationActionButton(color: .brandPrimary, imageName: "network")
+                
+            })
+                .accessibilityRemoveTraits(.isButton)
+                .accessibilityLabel(Text("go to website"))
+            
+            Button {
+                viewModel.callLocation()
+            } label: {
+                LocationActionButton(color: .brandPrimary, imageName: "phone.fill")
+                    .accessibilityLabel(Text("call location"))
+            }
+            if let _ = CloudKitManager.shared.profileRecordID {
+                Button {
+                    viewModel.updateCheckInStatus(to: viewModel.isCheckedIn ? .checkedOut : .checkedIn)
+                    
+                } label: {
+                    LocationActionButton(color: viewModel.buttonColor, imageName: viewModel.buttonImageTitle)
+                }
+                .accessibilityLabel(Text(viewModel.buttonA11yLabel))
+                .disabled(viewModel.isLoading)
+            }
+        }
+        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+        .background(Color(.secondarySystemBackground))
+        .clipShape(Capsule())
+    }
+}
+
+
+fileprivate struct AvatarGridView: View {
+    
+    @Environment(\.sizeCategory) var sizeCategory
+    @ObservedObject var viewModel: LocationDetailViewModel
+    
+    var body: some View {
+        ZStack {
+            if viewModel.checkedInProfiles.isEmpty {
+                
+                GridEmptyStateTextView()
+                
+            } else {
+                ScrollView {
+                    LazyVGrid(columns: viewModel.determineColumns(for: sizeCategory), content: {
+                        ForEach(viewModel.checkedInProfiles)  { profile in
+                            FirstNameAvatarView(profile: profile)
+                            
+                                .onTapGesture { viewModel.show(profile, in: sizeCategory) }
+                        }
+                    })
+                }
+            }
+            if viewModel.isLoading { LoadingView() }
+        }
+    }
+}

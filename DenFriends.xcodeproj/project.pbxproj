@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1BA09EF52791556D00570E0B /* ProfileSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BA09EF42791556D00570E0B /* ProfileSheetView.swift */; };
 		1BC9C7D2268F867E0063A715 /* DenFriendsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C7D1268F867E0063A715 /* DenFriendsApp.swift */; };
 		1BC9C7D4268F867E0063A715 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C7D3268F867E0063A715 /* ContentView.swift */; };
 		1BC9C7D6268F86800063A715 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1BC9C7D5268F86800063A715 /* Assets.xcassets */; };
@@ -46,9 +47,11 @@
 		1BC9C831268FA36E0063A715 /* MapBalloon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C830268FA36E0063A715 /* MapBalloon.swift */; };
 		1BC9C833268FA6B70063A715 /* DFAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C832268FA6B70063A715 /* DFAnnotation.swift */; };
 		1BC9C83626936B1B0063A715 /* AppTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BC9C83526936B1B0063A715 /* AppTabViewModel.swift */; };
+		1BFAF5132797D38D00BFB86C /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1BFAF5122797D38D00BFB86C /* HapticManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1BA09EF42791556D00570E0B /* ProfileSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSheetView.swift; sourceTree = "<group>"; };
 		1BC9C7CE268F867E0063A715 /* DenFriends.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DenFriends.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BC9C7D1268F867E0063A715 /* DenFriendsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenFriendsApp.swift; sourceTree = "<group>"; };
 		1BC9C7D3268F867E0063A715 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -91,6 +94,7 @@
 		1BC9C830268FA36E0063A715 /* MapBalloon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapBalloon.swift; sourceTree = "<group>"; };
 		1BC9C832268FA6B70063A715 /* DFAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFAnnotation.swift; sourceTree = "<group>"; };
 		1BC9C83526936B1B0063A715 /* AppTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabViewModel.swift; sourceTree = "<group>"; };
+		1BFAF5122797D38D00BFB86C /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +234,7 @@
 				1BC9C823268F934F0063A715 /* LocationDetailView.swift */,
 				1BC9C825268F936D0063A715 /* LocationDetailViewModel.swift */,
 				1BC9C827268F94080063A715 /* ProfileModalView.swift */,
+				1BA09EF42791556D00570E0B /* ProfileSheetView.swift */,
 			);
 			path = LocationDetailView;
 			sourceTree = "<group>";
@@ -269,6 +274,7 @@
 			children = (
 				1BC9C804268F88C40063A715 /* LocationManager.swift */,
 				1BC9C806268F88EA0063A715 /* CloudKitManager.swift */,
+				1BFAF5122797D38D00BFB86C /* HapticManager.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -380,6 +386,7 @@
 				1BC9C810268F8FAC0063A715 /* PhotoPicker.swift in Sources */,
 				1BC9C822268F93020063A715 /* ProfileViewModel.swift in Sources */,
 				1BC9C7E8268F86FF0063A715 /* CustomModifiers.swift in Sources */,
+				1BFAF5132797D38D00BFB86C /* HapticManager.swift in Sources */,
 				1BC9C80D268F898A0063A715 /* MockData.swift in Sources */,
 				1BC9C82E268F949B0063A715 /* LocationCell.swift in Sources */,
 				1BC9C7EC268F87740063A715 /* OnboardView.swift in Sources */,
@@ -403,6 +410,7 @@
 				1BC9C831268FA36E0063A715 /* MapBalloon.swift in Sources */,
 				1BC9C82C268F94830063A715 /* LocationListViewModel.swift in Sources */,
 				1BC9C816268F90010063A715 /* AvatarView.swift in Sources */,
+				1BA09EF52791556D00570E0B /* ProfileSheetView.swift in Sources */,
 				1BC9C7F5268F87E50063A715 /* Constants.swift in Sources */,
 				1BC9C7FD268F88430063A715 /* CKAsset+Ext.swift in Sources */,
 				1BC9C812268F8FC80063A715 /* XDismissButton.swift in Sources */,

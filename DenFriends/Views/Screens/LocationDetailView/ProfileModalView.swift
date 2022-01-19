@@ -22,16 +22,20 @@ struct ProfileModalView: View {
                     .font(.title2)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
+                    .padding(.horizontal)
                 
                 Text(profile.companyName)
                     .fontWeight(.semibold)
                     .lineLimit(1)
                     .minimumScaleFactor(0.75)
                     .foregroundColor(.secondary)
+                    .padding(.horizontal)
+                    .accessibilityLabel(Text("works at \(profile.companyName)"))
                 
                 Text(profile.bio)
                     .lineLimit(3)
                     .padding()
+                    .accessibilityLabel(Text("Bio, \(profile.bio)"))
             }
             .frame(width: 300, height: 230)
             .background(Color(.secondarySystemBackground))
@@ -43,14 +47,18 @@ struct ProfileModalView: View {
                     XDismissButton()
                 }, alignment: .topTrailing)
             
-            Image(uiImage: profile.createAvatarImage())
+            Image(uiImage: profile.avatarImage)
                 .resizable()
                 .scaledToFill()
                 .frame(width: 110, height: 110)
                 .clipShape(Circle())
                 .shadow(color: .black.opacity(0.5), radius: 4, x: 0, y: 6)
                 .offset(y: -120)
+                .accessibilityHidden(true)
         }
+        .transition(.opacity.combined(with: .slide))
+        .animation(.easeOut)
+        .zIndex(2)
     }
 }
 
